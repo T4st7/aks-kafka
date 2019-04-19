@@ -6,3 +6,4 @@ Three node kafka and three node zookeeper cluster. Kafka and Zookeeper can be sc
 ```
 # login to aks cluster
 $ az aks get-credentials --resource-group <aks-resource-group> --name <aks-name>
+```
