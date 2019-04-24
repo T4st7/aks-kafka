@@ -69,16 +69,21 @@ $ kubectl -n <namespace> create -f ./240-kafka-statefulset.yml
 $ kubectl -n <namespace> create -f ./400-pod-test.yml
 ```
 
-## sanity checks
+## Commands
 
+### interact with kubernetes cluster
 ```bash
-# check pods
-$ kubectl -n <namespace> get pods
-
 # access dashboard
 $ az aks browse --resource-group <aks-resource-group> --name <aks-name>
 
-# list created topics on test pod
+# check pods
+$ kubectl -n <namespace> get pods
+```
+
+### kafka quickstart
+
+```bash
+# list topics
 $ kubectl -n <aks-namespace> exec kafka-test-client -- \
 /usr/bin/kafka-topics --zookeeper kafka-zookeeper:2181 --list
 
@@ -86,4 +91,12 @@ $ kubectl -n <aks-namespace> exec kafka-test-client -- \
 $ kubectl -n <aks-namespace> exec kafka-test-client -- \
 /usr/bin/kafka-topics --zookeeper kafka-zookeeper:2181 \
 --topic test --create --partitions 1 --replication-factor 1
+
+# send a message
+$ kubectl -n <aks-namespace> exec -ti kafka-test-client -- /usr/bin/kafka-console-producer --broker-list kafka:9092 --topic test
+
+# start consumer
+$ kubectl -n <aks-namespace> exec -ti kafka-test-client -- \
+/usr/bin/kafka-console-consumer --bootstrap-server kafka:9092 \
+--topic test --from-beginning
 ```
